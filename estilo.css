@@ -1,0 +1,468 @@
+/* GENERALES ***************************************/
+* {
+    list-style-type: none;
+    font-size: 1.1rem;
+    /* border: 1px solid red; */
+    /* outline: 1px solid red; */       
+}
+
+html {
+    /* background-color: brown; */
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: repeating-linear-gradient(
+        to top,
+        brown,                      /* Color de línea 1 */
+        rgba(165, 42, 42, 0.8) 3px, /* Fin de la línea 1 */
+        brown 4px,                  /* Color de línea 2 */
+        rgba(165, 42, 42, 0.8) 3px  /* Fin de la línea 2 */
+    );
+}
+
+body {
+    /* position: relative; */
+    min-width: 800px;
+    max-width: 1300px;
+    background-color:bisque;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    /* grid-template-columns: 68vw 12vw; */
+    grid-template-columns: minmax(148px,15%) minmax(480px,70%) minmax(148px,15%);
+    grid-template-areas: "header header header"
+                         "aside1 main aside2"
+                         "footer footer footer";
+    /* margin: 0px auto;
+    text-align: center;
+    border-style: solid; */
+    border-width: 0 2px 0;
+
+}
+
+main {
+    min-width: 50%;
+    grid-area: main;
+    padding: 1em 0;
+}
+
+p {
+    font-family: "Noto Sans", sans-serif;
+    
+}
+
+/* ASIDE ***************************************/
+
+aside * {
+    padding: 0;
+    margin: 1px;
+}
+
+aside {    
+    min-width: 150px;
+    /* border: 1px solid red; */
+    align-items: center;
+}
+
+
+aside.estilos {
+    grid-area: aside1;
+}
+
+aside.carrito {
+    grid-area: aside2;
+}
+
+
+aside article {
+    /* margin: 10% 0; */
+    padding: 2px;
+    text-align: center;
+    /* outline: 1px solid red; */
+    
+}
+
+aside article p {
+    font-size: 0.7em;
+    text-align:justify;
+    padding: 0 3px 5px;
+    margin: 5px;
+
+}
+
+h3 {
+    font-size: 1.2em;
+    font-weight: 800;
+    margin: 10px 5px;
+}
+
+aside article h6 {
+    text-align: left;
+    font-size: 0,9em;
+    margin: 5px 2px 2px;
+    padding: 0 5px;
+}
+
+img.icono {
+    width: 3em;
+    height: 3em;
+    margin-top: 2em;
+}
+
+#contenedor_carro {
+    margin: 1em 0;
+}
+
+#contenedor_carro li {
+    margin-top: 0.25em;
+    padding-left: 1em;
+    text-align: left;
+}
+
+/* HEADER Y TITULOS ***************************************/
+
+body > header {
+    grid-area: header;
+    background-color: rgba(90, 150, 120, 1);
+/*  background-size: cover; */
+    margin: 0;
+    padding: 0;
+}
+
+.logo_y_titulo {
+    margin: 0 0 12px;
+    background-color: rgba(90, 150, 120, 0.25);
+    background-image: url(/imagenes/fondo_header.png);
+    background-size: cover;
+    background-blend-mode:lighten;
+    
+    display: flex;
+    justify-content: flex-start;
+}
+
+h1 {
+    flex-grow: 1;
+    padding-right: 1em;
+    font-size: 4.5em;
+    text-shadow: -2px -2px 0 #fff, 
+                 /* 1px -1px 0 #fff; */
+                 2px  2px 0 #ccc; 
+                 /* 1px  1px 0 #fff; */
+    margin: auto;
+    
+ 
+}
+
+img.logo {
+    width: 8em;
+    height: 8em;
+    
+}
+
+/* NAVEGADOR ***************************************/
+nav ul {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 12px;
+}
+
+footer nav ul {
+    justify-content:center;
+}
+
+
+nav li {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    display:inline-flex; 
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 20px;
+    border: 2px;
+    border-style: solid;
+    
+}
+
+footer nav li {
+    border: 0;
+    font-weight: 600;
+    font-size: small;
+    padding: 0 10px;
+}
+
+a {
+    font-size: 1.3rem !important;
+    text-decoration: none;
+    color: black;   
+}
+
+/* EVENTO BOTON ***************************************/
+nav li:hover {
+    background-color: rgba(110, 180, 160, 50);
+}
+
+footer nav li:hover {
+    background-color:inherit;
+}
+
+/* SECTIONS ***************************************/
+
+h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin: 0;
+    font-size: x-large;
+}
+
+section {
+    text-align: center;
+    overflow: auto;
+    padding: 1em 0;
+}
+
+section video {
+    width: 40vw;
+}
+
+section > header {
+    margin: 5% auto 2%;   
+}
+
+section > p, section > form {
+    width: 90%;
+    display: inline-block;
+    text-align:center;
+    margin: 0 0 20px;
+}
+
+/* TABLAS ***************************************/
+
+table {
+    margin: auto;
+    min-width: 35vw;  
+}
+
+table, td, th {
+    border: 0;
+    border-style: solid;
+    font-size: larger;
+}
+
+th {
+    border: solid;
+    border-width: 0 0 1px 0;
+    margin: 0;
+    padding: 0;
+}
+
+th {
+    font-size: larger;
+    font-weight: 600;
+}
+
+th, td {
+    padding: 5px;
+    min-width: 5vw;
+    text-align: center;
+}
+
+tr > td {
+    font-style: italic;
+    font-weight: 600;
+}
+
+td + td {
+    font-style:normal;
+    font-weight:normal;
+}
+
+
+/*BOTONES ***********************************/
+
+#Botones_carro #vaciar, #Botones_carro #comprar {
+    padding: 0.4em;
+    min-width: 80%;
+    max-width: 95%;
+    border-radius: 10px;
+}
+
+/* button img {
+    padding-top:    3px; /*Centrado vertical*//*
+    width: 1.2em;
+}
+*/
+
+
+.contenedor--botones {
+    width: 165px;
+    height: 65%;
+    display: grid;
+    grid-template-columns: 3fr 2fr 3fr;
+    align-items: center;
+    justify-content: center;
+    align-self:normal;
+    margin: 3px;
+    margin-bottom: 6px;
+    padding: 3px;
+    background-color: white;
+    border-radius: 15px;
+    
+}
+
+.contenedor--botones button {
+    /* width: 2.5em; */
+    /* width: max-content; */
+    border-radius: 10px;
+    border-width: 0.02em;
+}
+
+/* Coloreado de botones */
+.contenedor--botones > button {
+    background-color: rgba(128, 240, 147, 0.8);
+    /* width: 32%; */
+    
+
+}
+
+.contenedor--botones img + button {
+    background-color: rgba(240, 128, 128, 0.8);
+    
+    
+}
+
+.contenedor--botones img {
+    height: 60%;
+    margin: 0 auto;
+    justify-self: stretch;
+    
+    /* margin: 4px 0 0 0; */
+
+    
+}
+
+/* IFRAME ***************************************/
+iframe {
+    width: 50vw;
+    border-style: inset;
+    border-width: 5px;
+    border-color: #555;
+}
+
+/* FORMULARIO ***************************************/
+form {
+    margin: auto;
+}
+
+input, select {
+    padding: 0;
+    margin: 2px;
+    width: 25vw;
+}
+
+label {
+    display:inline-block;
+    font-weight: 600;
+    text-align: left;
+    width: 6vw;
+}
+
+/* MEDIA QUERYS */
+/*
+@media (min-width: 600px) {
+        input, select {
+        min-width: 120px;
+    }
+
+    label {
+        min-width: 60px;
+    }
+}
+
+@media (min-width: 992px) {
+    input, select {
+        min-width: 150px;
+    }
+
+    label {
+        min-width: 75px;
+    }
+}
+
+@media only screen and (min-width: 1300px) {
+    input, select {
+        min-width: 200px;
+    }
+
+    label {
+        min-width: 100px;
+    }
+}*/
+
+/* FOOT ***************************************/
+footer {
+    background-color: rgba(90, 150, 120, 25);
+    margin: 30px 0 0 0;
+    padding: 10px 30px;
+    grid-area: footer;
+}
+
+footer p, footer nav ul {
+    margin: 10px;
+}
+
+/* OTROS ***************************************/
+.sin_stock {
+    color: red;
+    font-weight: 600;
+}
+
+/* BEM (Productos) ***********************/
+.listado_productos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.producto--bem {
+    display: grid;
+    place-items: center;
+    width: 190px;
+    background-color: rgba(90, 150, 120, 0.75);
+    border-radius: 18px;
+    padding: 5px 1px;    
+    margin: 5px;
+
+}
+
+.producto--bem p {
+    margin: 0;
+    padding: 0;
+    font-size: smaller;
+}
+
+.producto--bem h5 {
+    margin: 0;
+    padding: 0;
+    font-size: larger;
+}
+
+/* Imagenes BEM */
+div.contenedor--imagen {
+    padding: 3px;    
+    margin: 3px;  
+    width: 165px;
+    height: 200px;
+    background-color: white;
+    border-radius: 15px;
+}
+
+div.contenedor--imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    
+}
+

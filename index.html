@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="icon" type="image/x-icon" href="/icon/favicon128.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Sitio Trabajo Final</title>
+</head>
+<body>
+    <header>
+        <div class="logo_y_titulo">
+            <img src="/imagenes/LOGO.png" alt="Logo de Cañon" class="logo" title="Cerveza el Cañon">
+            <h1>Cervecería Cañón</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#procesos">Procesos</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#">Carrito</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+    <aside class="estilos">
+        <img src="/imagenes/estilos.png" alt="estilos de cerveza" class="icono">
+        <h3>ESTILOS</h3>
+        <article>
+            <h6>RUBIA:</h6>
+            <p>Con diferentes colores que van de amarillo pálido a dorado y con un perfil de lúpulo suave a medio, estas cerveza ale son las más conocidas por los que beben la cerveza tipo lager americana tradicional. Muchas cervecerías lanzan sus cervezas de verano en el pico de la temporada, y muchas son rubias por su cuerpo liviano y por ser ideales para tomar cuando hace calor. Este es el tipo de cerveza que puedes tomar junto a la piscina o en la playa como un refresco.</p>
+        </article>
+        <article>    
+            <h6>ALE DE TRIGO:</h6>
+            <p>Si no son las rubias, el resto de las cervezas ideales para tomar en verano son las de trigo. A menudo tienen un dejo de banana con un toque de clavo de olor y vainilla.</p>
+        </article>
+        <article>
+            <h6>ALE PALE E IPA:</h6>    
+            <p>Estas cervezas por lo general tienen un color ámbar a cobre y con alto contenido de lúpulo. Este es el estilo ale clásico. Si te gusta tomar champaña brut y vinos más secos, probablemente este sea el sabor para ti. En esta categoría están las cervezas India Pale Ale, la categoría con más participantes en la competencia de cervezas más importante, el Great America Beer Festival.</p>    
+        </article>
+            <article>    
+            <h6>PORTER Y STOUT:</h6>
+            <p>No le temas a la oscuridad. Estas cervezas tienen un gran sabor, ya que a menudo incluyen ingredientes como café y chocolate. Algunas tienen un cuerpo más suave, pero con un énfasis en los lúpulos. Otras tienen más cuerpo, un sabor más intento y mayor contenido de alcohol.</p>
+        </article>
+    </aside>
+    <main>
+    <!-- SECCION HOME-->
+    <section id="productos">
+        <header>
+        <h2>Productos</h2>
+        </header>
+        <table>
+            <!--<caption>Pedidos</caption>-->
+            <thead>
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bock</td>
+                    <td>$5500</td>
+                    <td>En Stock</td>
+                </tr>
+                <tr>
+                    <td>Honey</td>
+                    <td>$4700</td>
+                    <td>En Stock</td>
+                </tr>
+                <tr>
+                    <td>IPA</td>
+                    <td>$5100</td>
+                    <td class="sin_stock">Sin Stock</td>
+                </tr>
+                <tr>
+                    <td>Pale Ale</td>
+                    <td>$4600</td>
+                    <td>En Stock</td>
+
+                </tr>
+                <tr>
+                    <td>Scottish</td>
+                    <td>$5100</td>
+                    <td>En Stock</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>    
+    <section id="home">
+        <header>
+            <h2>Nuestros Productos</h2>
+        </header>
+        <div id="gondola" class="listado_productos">
+    
+        </div>
+    
+    </section>
+    <!-- SECCION PROCESOS-->
+    <section id="procesos">
+        <header>
+        <h2>Nuestro Proceso</h2>
+        </header>
+        <p>Nuestros establecimiento Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit delectus voluptatibus non recusandae nam distinctio sunt modi nemo rerum dolore eligendi incidunt cupiditate molestias, laboriosam similique nisi labore optio provident!</p>
+        <h3>Un poco de historia</h3>
+        <video controls muted loop poster="/videos/poster.png">
+            <source src="/videos/aviso.mp4" type="video/mp4">
+            <track src="/videos/aviso.vtt" kind="subtitles" srclang="es" label="Español"></track>
+        </video>
+    </section>
+    <!-- SECCION NOSOTROS-->
+    <section id="nosotros">
+        <header>
+            <h2>Nosotros</h2>
+        </header>
+        <p>Somos una empresa Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit iure repellendus aliquam quibusdam similique libero quidem dolor excepturi qui. Consectetur, ipsum non quam aut aliquam quidem culpa doloremque eius. Iure.</p>
+        <h3>Donde Estamos</h3>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d6564.69440548062!2d-58.3763926!3d-34.6459335!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sar!4v1757701815352!5m2!1ses!2sar" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>    
+    <!-- SECCION CONTACTO-->
+    <section id="contacto">
+        <header>
+        <h2>Contacto</h2>
+        </header>
+        <form action="https://formspree.io/f/mrbadkqz" method="POST" autocomplete="on">
+            <label for="nombre">Nombre:</label><input type="text" id="nombre" name="nombre"maxlength="50" required><br>
+            <label for="apellido">Apellido:</label><input type="text" id="apellido" name="apellido" maxlength="50"><br>
+            <label for="email">Email:</label><input type="email" id="email" name="email" autocomplete="0" required><br>
+            <label for="relacion">Relación:</label>
+                <select name="relacion" id="relacion">
+                    <option value="cliente">Cliente</option>
+                    <option value="proveedor">Proveedor</option>
+                    <option value="club">Beer Club</option>
+                    <option value="otro">otro</option>
+                </select>
+            <br>
+            <label for="file">Adjuntos:</label><input type="file" id="file"><br>
+            <label for="comentario">Comentario:</label><input type="textarea" id="comentario" name="comentario" maxlength="1000"><br>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+    </main>
+    <aside class="carrito">
+        <img src="/icon/carrito.png" alt="estilos de cerveza" class="icono">
+        <h3>CARRITO DE COMPRAS</h3>
+        <div id="estado">
+            <!-- <p>Productos en el carrito: <span id="contador"></span></p> -->
+            <p><i>El carrito está vacío</i></p>
+        </div>
+        <ul id="contenedor_carro">
+           
+        </ul>
+        <div id="Botones_carro">
+            <p id="total"></p>
+            <button id="vaciar">Vaciar carrito</button>
+            <button id="comprar">Comprar</button>
+        </div>
+    </aside>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#procesos">Procesos</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#carrito">Carrito</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+        <p>Encontranos en <a href="https://maps.app.goo.gl/7ixBbUgsFJzTtx6u5">Gral. Hornos 2150, Ciudad Autónoma de Buenos Aires, Argentina</a></p>
+        <p>Llamanos a <a href="https://wa.me/5491160008888">+54 9 11 6000 8888</a>   |  Envianos tu mail a: <a href="mailto:coso@gmai.lcom">coso@gmai.lcom</a></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

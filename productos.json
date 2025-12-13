@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "nombre":"Bock",
+        "img":"imagenes/Productos/Bock.png",
+        "descripcion":"Cerveza negra con fuerte impronta en boca.",
+        "precio": 6000
+    },
+    {
+        "id": 2,
+        "nombre":"Honey",
+        "img":"imagenes/Productos/Honey.png",
+        "descripcion":"Cerveza Fuerte de alto amargor",
+        "precio": 4500
+    },
+    {
+        "id": 3,
+        "nombre":"IPA",
+        "img":"imagenes/Productos/IPA.png",
+        "descripcion":"Cerveza Fuerte con intensas notas de lúpulo.",
+        "precio": 5000
+    },
+    {
+        "id": 4,
+        "nombre":"Pale Ale",
+        "img":"imagenes/Productos/PaleAle.png",
+        "descripcion":"Cerveza liviana, suave de aroma y boca.",
+        "precio": 4500
+    },
+    {
+        "id": 5,
+        "nombre":"Scottish",
+        "img":"imagenes/Productos/Scottish.png",
+        "descripcion":"Cerveza Fuerte de alta graduación alcohólica",
+        "precio": 6000
+    },
+    {
+        "id": 6,
+        "nombre":"Stout",
+        "img":"imagenes/Productos/Stout.png",
+        "descripcion":"Cerveza cremosa, notas ahumadas, cuerpo intenso.",
+        "precio": 6000
+    },
+    {
+        "id": 7,
+        "nombre":"Dubbel",
+        "img":"imagenes/Productos/Dubbel.png",
+        "descripcion":"Cerveza ambar oscuro, notas frutas ahumadas.",
+        "precio": 7000
+    },
+    {
+        "id": 8,
+        "nombre":"wheat beer",
+        "img":"imagenes/Productos/WheatBeer.png",
+        "descripcion":"Cerveza de trigo. Aspecto turbio, notas agrias.",
+        "precio": 5500
+    },
+    {
+        "id": 9,
+        "nombre":"Porter",
+        "img":"imagenes/Productos/Porter.png",
+        "descripcion":"Cerveza oscura. Aspecto turbio, notas malta tostada.",
+        "precio": 5000
+    },
+    {
+        "id": 10,
+        "nombre":"AmberLager",
+        "img":"imagenes/Productos/AmberLager.png",
+        "descripcion":"Color ámbar, notas de caramelo.",
+        "precio": 5500
+    }
+]
