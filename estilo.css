@@ -242,7 +242,9 @@ section > p, section > form {
 
 table {
     margin: auto;
-    min-width: 35vw;  
+    /* min-width: 35vw;   */
+    min-width:60%;
+    
 }
 
 table, td, th {

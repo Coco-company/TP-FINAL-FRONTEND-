@@ -1,69 +1,34 @@
 //*********** VARIABLES GLOBALES *************/
 let productos = [];
 let listaProductosCarrito = cargarCarritoDeStorage();
+const contenedorProductos = document.getElementById("gondola");
 
 console.log('---INICIO---');
 
 //función para cargar datos desde el Local Storage
-function cargarCarritoDeStorage() {
-    const carritoJSON = localStorage.getItem("listaCarrito");
-    if (carritoJSON) {
-        //console.log("carritoJSON ",carritoJSON);
-        return JSON.parse(carritoJSON);
-    }
-    else {
-        return [];
-    }
-}
 
-function mostrarBotoneraCarro() {
+function mostrarBotonesyContador() {
+
     let botonera = document.getElementById("Botones_carro");
     let contenedorCarro = document.getElementById("contenedor_carro");
-
-    // Si el carro no tiene contenido oculta los botones
-    if(contenedorCarro.childElementCount > 0){
-        console.log("eee");
+    const estadoCarrito = document.querySelector(".carrito #estado");
+    
+    // Si el carro no tiene contenido oculta los botones y el contador
+    if(contenedorCarro.childElementCount != 0){
+        console.log("carro con productos");
         botonera.style.visibility = "visible";
+        estadoCarrito.innerHTML = '<p>Productos en el carrito: <span id="contador"></span></p>';
     }else{
         botonera.style.visibility = "hidden";
+        estadoCarrito.innerHTML = "<p><i>El carrito está vacío</i></p>";
     }
 }
 
-//función para actualizar el contador
-/*
-function actualizarContador() {
-
-    //console.log('entro actualizar');
-    
-    const contenedorEstado = document.querySelector(".carrito div#estado");
-    contenedorEstado.innerHTML = '<p>Productos en el carrito: <span id="contador"></span></p>';
-    
-    const contenedorNumero = document.querySelector(".carrito #contador");
-    //obtener el contenedor del número
-    //si el storage no está vacío
-    if (listaProductosCarrito.length != 0) {
-        
-        //Repetido corregir (prevuio al if?)
-        console.log('entroActualizar 34');
-        
-        //insertar los productos
-        for (const producto of listaProductosCarrito) {
-            console.log('producto: ',producto);
-            insertarProductoHTML(producto);
-        }
-        //actualizar el contador
-        
-        //verificamos
-        // console.log(contenedorNumero);
-        //usamos la cantidad de productos de la lista
-        contenedorNumero.textContent = listaProductosCarrito.length;
-    }else{
-        contenedorEstado.innerHTML = '<p><i>El carrito está vacío</i></p>';
-    }
-}*/
 
 //función para actualizar el contador
 function actualizarContador() {
+
+    mostrarBotonesyContador();
     //obtener el contenedor del número
     const contenedorNumero = document.querySelector(".carrito #contador");
     //verificamos si existe (el cartel de cantidad se muestra si hay productos)
@@ -74,14 +39,16 @@ function actualizarContador() {
     }
 }
 
-//función para guardar datos en Local Storage
+//-------------------------------------------------------------------------
+//----------------------      LOCAL STORAGE    ----------------------------
+//-------------------------------------------------------------------------
+
 function guardarCarritoEnStorage(lista) {
     const carritoJSON = JSON.stringify(lista);
     localStorage.setItem("listaCarrito", carritoJSON);
     // console.log("producto en Storage");
 }
 
-//función para eliminar el carrito en Local Storage
 function eliminarCarritoEnStorage() {
     localStorage.removeItem("listaCarrito");
     listaProductosCarrito = [];
@@ -90,13 +57,27 @@ function eliminarCarritoEnStorage() {
     
 }
 
+function cargarCarritoDeStorage() {
+    const carritoJSON = localStorage.getItem("listaCarrito");
+    if (carritoJSON) {
+        return JSON.parse(carritoJSON);
+    }
+    else {
+        return [];
+    }
+}
+
+
 //función para vaciar el carrito en la página
 function vaciarCarrito() {
     //VER DE CONVERTIR EN VARIABLE GLOBAL
     const contenedorCarrito = document.querySelector(".carrito #contenedor_carro");
     contenedorCarrito.innerHTML = "";
-    const listaCarrito = document.querySelector(".carrito #estado");
-    listaCarrito.innerHTML = "<p><i>El carrito está vacío</i></p>";
+
+    //VER DE EXTRAER A FUNCIÓN actualizarEstadoCarrito()
+    const estadoCarrito = document.querySelector(".carrito #estado");
+    // RESTAURO ESTADO INICIAL DEL DIV ESTADO
+    estadoCarrito.innerHTML = "<p><i>El carrito está vacío</i></p>";
 }
 
 // 
@@ -106,8 +87,9 @@ function vaciarCarrito() {
 //-----------------   CARGA PRODUCTOS EN GONDOLA   ------------------------
 //-------------------------------------------------------------------------
 function insertarProductos(lista) {
-    // Capturo el elemento contenedor de productos
-    const contenedorProductos = document.getElementById("gondola");
+    // Capturo el elemento contenedor de productos (PASADO A GLOBAL!)
+    //const contenedorProductos = document.getElementById("gondola");
+
     //console.log(contenedorProductos);
 
     //utilizo un bucle para insertar todos los elementos de la lista
@@ -247,7 +229,7 @@ async function cargarProductosApi() {
 }
 
 //función para insertar producto en el html
-function insertarProductoHTML(producto) {
+function insertarProductoEnCarro(producto) {
 
     console.log('pasó por insertar producto');
     // console.log("IPH producto ",producto);
@@ -261,6 +243,8 @@ function insertarProductoHTML(producto) {
     liProducto.className = "list-group-item";
     //insertar el elemento
     listaCarrito.appendChild(liProducto);
+
+    
 }
 
 
@@ -275,6 +259,8 @@ function buscarEnLista(id, lista) {
             return id;
         }
     }
+
+    //POR ACÁ SI QUIERO AGREGAR LA FUNCIONALIDAD DE CANTIDAD DE PRODUCTOS
     //si en el bucle no se encontró el id
     return -1;
 }
@@ -335,7 +321,7 @@ function agregarAlCarrito(datosEvento) {
             console.log(listaProductosCarrito);
 
             //insertar el producto en el HTML
-            insertarProductoHTML(productoEncontrado);
+            insertarProductoEnCarro(productoEncontrado);
 
             //actualizar el contador de productos del carrito
             actualizarContador();
@@ -355,15 +341,14 @@ async function inicio() {
     /* Oculta botones "vaciar" y "comprar" si el carro está vacío*/
     /* Ver de modulizar */
 
-
     // Guardamos en var global productos la lista obtenida del json
     productos = await cargarProductosApi();
 
-    // Insertar los productos en la página
+    // Insertar los productos en la página (Gondola)
     insertarProductos(productos);
 
-    //seleccionar el contenedor de los productos
-    const contenedorProductos = document.querySelector("#gondola");
+    //seleccionar el contenedor de los productos ingresados PASADO A GLOBAL
+    //const contenedorProductos = document.querySelector("#gondola");
     
     // Agrega listeners para los eventos de mouse over y mouse out
     contenedorProductos.addEventListener("mouseover", mostrarDescripcion);
@@ -386,7 +371,7 @@ async function inicio() {
     if (listaProductosCarrito.length != 0) {
         //insertar los productos
         for (const producto of listaProductosCarrito) {
-            insertarProductoHTML(producto);
+            insertarProductoEnCarro(producto);
         }
         //actualizar el contador
         actualizarContador();
