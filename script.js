@@ -24,7 +24,6 @@ function mostrarBotonesyContador() {
     }
 }
 
-
 //función para actualizar el contador
 function actualizarContador() {
 
