@@ -1,6 +1,6 @@
 //*********** VARIABLES GLOBALES *************/
 let productos = [];
-let listaProductosCarrito = cargarCarritoDeStorage();
+let listaProductosCarritoEnStorage = cargarCarritoDeStorage();
 const contenedorProductos = document.getElementById("gondola");
 
 console.log('---INICIO---');
@@ -15,7 +15,7 @@ function mostrarBotonesyContador() {
     
     // Si el carro no tiene contenido oculta los botones y el contador
     if(contenedorCarro.childElementCount != 0){
-        console.log("carro con productos");
+        //console.log("carro con productos");
         botonera.style.visibility = "visible";
         estadoCarrito.innerHTML = '<p>Productos en el carrito: <span id="contador"></span></p>';
     }else{
@@ -32,9 +32,9 @@ function actualizarContador() {
     const contenedorNumero = document.querySelector(".carrito #contador");
     //verificamos si existe (el cartel de cantidad se muestra si hay productos)
     if(contenedorNumero!=null){
-        console.log(contenedorNumero);
+        //console.log(contenedorNumero);
         //usamos la cantidad de productos de la lista
-        contenedorNumero.textContent = listaProductosCarrito.length;
+        contenedorNumero.textContent = listaProductosCarritoEnStorage.length;
     }
 }
 
@@ -50,7 +50,7 @@ function guardarCarritoEnStorage(lista) {
 
 function eliminarCarritoEnStorage() {
     localStorage.removeItem("listaCarrito");
-    listaProductosCarrito = [];
+    listaProductosCarritoEnStorage = [];
     vaciarCarrito();
     actualizarContador();
     
@@ -66,8 +66,9 @@ function cargarCarritoDeStorage() {
     }
 }
 
-
-//función para vaciar el carrito en la página
+//-------------------------------------------------------------------------
+//---------------------- VACIAR CARRITO EN PÁGINA -------------------------
+//-------------------------------------------------------------------------
 function vaciarCarrito() {
     //VER DE CONVERTIR EN VARIABLE GLOBAL
     const contenedorCarrito = document.querySelector(".carrito #contenedor_carro");
@@ -77,51 +78,6 @@ function vaciarCarrito() {
     const estadoCarrito = document.querySelector(".carrito #estado");
     // RESTAURO ESTADO INICIAL DEL DIV ESTADO
     estadoCarrito.innerHTML = "<p><i>El carrito está vacío</i></p>";
-}
-
-// 
-
-
-//-------------------------------------------------------------------------
-//-----------------   CARGA PRODUCTOS EN GONDOLA   ------------------------
-//-------------------------------------------------------------------------
-function insertarProductos(lista) {
-    // Capturo el elemento contenedor de productos (PASADO A GLOBAL!)
-    //const contenedorProductos = document.getElementById("gondola");
-
-    //console.log(contenedorProductos);
-
-    //utilizo un bucle para insertar todos los elementos de la lista
-    //uso desestructuración para acceder directamente a las propiedades del objeto lista
-    for (const { id, img, nombre, descripcion, precio } of lista) {
-        //creamos el elemento (en memoria)
-        const nuevoArticulo = document.createElement("article");
-        
-        //creamos el contenido del elemento
-        //usamos el atributo data del botón para identificar el producto
-        nuevoArticulo.innerHTML = `
-                    <div class="contenedor--imagen">
-                        <img src="${img}" alt="${nombre}">
-                    </div>
-                    <h5>${nombre}</h5>
-                    <a href="#." data-descripcion="${descripcion}">
-                            Ver descripción
-                    </a>
-                    <div class="descripcion"></div>
-                    <p>${precio.toLocaleString("es-AR", { style: "currency", currency: "ARS" })}</p>
-                    <div class="contenedor--botones">
-                        <button data-id="${id}">+</button>
-                        <img src="/icon/carritoIco.png" alt="agregar al carrito de compras">
-                        <button data-id="${id}">-</button>
-                    </div>
-            `;
-        //Seteamos atributos al elemento a crear
-        nuevoArticulo.setAttribute("id", "articulo_"+id);
-        nuevoArticulo.setAttribute("class", "producto--bem");
-
-        //insertamos el nuevo elemento en el contenedor en el HTML
-        contenedorProductos.appendChild(nuevoArticulo);
-    }
 }
 
 //--------------------------------------------------------------------
@@ -193,6 +149,48 @@ function ocultarDescripcion(datosEvento) {
     }
 }
 
+//-------------------------------------------------------------------------
+//-----------------   CARGA PRODUCTOS EN GONDOLA   ------------------------
+//-------------------------------------------------------------------------
+function insertarProductos(lista) {
+    // Capturo el elemento contenedor de productos (PASADO A GLOBAL!)
+    //const contenedorProductos = document.getElementById("gondola");
+
+    //console.log(contenedorProductos);
+
+    //utilizo un bucle para insertar todos los elementos de la lista
+    //uso desestructuración para acceder directamente a las propiedades del objeto lista
+    for (const { id, img, nombre, descripcion, precio } of lista) {
+        //creamos el elemento (en memoria)
+        const nuevoArticulo = document.createElement("article");
+        
+        //creamos el contenido del elemento
+        //usamos el atributo data del botón para identificar el producto
+        nuevoArticulo.innerHTML = `
+                    <div class="contenedor--imagen">
+                        <img src="${img}" alt="${nombre}">
+                    </div>
+                    <h5>${nombre}</h5>
+                    <a href="#." data-descripcion="${descripcion}">
+                            Ver descripción
+                    </a>
+                    <div class="descripcion"></div>
+                    <p>${precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}</p>
+                    <div class="contenedor--botones">
+                        <button data-id="agregar_${id}">+</button>
+                        <img src="/icon/carritoIco.png" alt="agregar al carrito de compras">
+                        <button data-id="remover_${id}">-</button>
+                    </div>
+            `;
+        //Seteamos atributos al elemento a crear
+        nuevoArticulo.setAttribute("id", "articulo_"+id);
+        nuevoArticulo.setAttribute("class", "producto--bem");
+
+        //insertamos el nuevo elemento en el contenedor en el HTML
+        contenedorProductos.appendChild(nuevoArticulo);
+    }
+}
+
 //--------------------------------------------------------------------
 //--------------------- TRAER PRODUCTOS DEL API ----------------------
 //--------------------------------------------------------------------
@@ -227,8 +225,8 @@ async function cargarProductosApi() {
     }
 }
 
-//función para insertar producto en el html
-function insertarProductoEnCarro(producto) {
+//función para insertar 1 producto en el HTML del carrito
+function mostrarProductoEnCarro(producto) {
 
     console.log('pasó por insertar producto');
     // console.log("IPH producto ",producto);
@@ -237,15 +235,30 @@ function insertarProductoEnCarro(producto) {
     //crear el elemento li
     const liProducto = document.createElement("li");
     //agregar el contenido
-    liProducto.textContent = `${producto.nombre} ${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS" })}`;
+    liProducto.textContent = `${producto.nombre} ${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}`;
     //agregar las clases
     liProducto.className = "list-group-item";
     //insertar el elemento
-    listaCarrito.appendChild(liProducto);
-
-    
+    listaCarrito.appendChild(liProducto);  
 }
 
+//función para insertar todos los productos en el HTML del carrito
+function mostrarTodosLosProductoEnCarro(listaProductos) {
+    
+    //Blanqueo el contenido actual del carrito
+    const listaCarrito = document.querySelector("aside.carrito #contenedor_carro");
+    listaCarrito.innerHTML = "";
+
+    //si el storage no está vacío
+    if (listaProductos.length != 0) {
+        //Inserta LOS productos en el HTML
+        for (const producto of listaProductos) {
+            mostrarProductoEnCarro(producto);
+        }
+        //actualizar el contador
+        actualizarContador();
+    }
+}
 
 function buscarEnLista(id, lista) {
     //verificamos los datos recibidos
@@ -277,57 +290,116 @@ function buscarProductoPorId(id, lista) {
     }
 }
 
-function removerCartelVacio(){
-    // const campoCartel = 
-}
-
 //---------------------------------------------------------------------------
 //---------------------- Agregar productos al carrito -----------------------
 //---------------------------------------------------------------------------
-function agregarAlCarrito(datosEvento) {
+
+function agregarAlCarrito(idBotonCliqueado){
+    //buscamos el id en la lista del carrito y guardamos el resultado
+    const idEncontrado = buscarEnLista(idBotonCliqueado, listaProductosCarritoEnStorage)
+
+    // Si el id no está en la lista (-1) lo agregamos
+    if (idEncontrado === -1) {
+        //buscar el producto en la lista de productos por el idEncontrado
+        //y lo guardamos
+        const productoEncontrado = buscarProductoPorId(idBotonCliqueado, productos);
+        //console.log(productoEncontrado);
+        
+        //agregar el productoEncontrado a la lista del carrito
+        listaProductosCarritoEnStorage.push(productoEncontrado)
+        //console.log("agregar lista carrito");
+        console.log(listaProductosCarritoEnStorage);
+
+        //inserta EL producto en el HTML
+        mostrarProductoEnCarro(productoEncontrado);
+
+        //actualizar el contador de productos del carrito
+        actualizarContador();
+
+        //agregar producto al storage
+        guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+    }else{
+        // --- Si hay tiempo ver de agregar cantidad de cada producto ---
+        console.log("El producto ya está en el carrito");
+    }
+}
+
+
+
+function removerDelCarrito(idBotonCliqueado){
+    //buscamos el id en la lista del carrito y guardamos el resultado
+    const idEncontrado = buscarEnLista(idBotonCliqueado, listaProductosCarritoEnStorage)
+
+    // Si el id está en la lista lo removemos
+    if (idEncontrado !== -1) {
+        //buscar el producto en la lista de productos por el idEncontrado
+        //y lo guardamos
+        const productoEncontrado = buscarProductoPorId(idBotonCliqueado, productos);
+        console.log(idEncontrado);
+        
+        //agregar el productoEncontrado a la lista del carrito
+//console.log("listaProductosCarritoEnStorage ",listaProductosCarritoEnStorage);
+
+        //listaProductosCarritoEnStorage.push(productoEncontrado)
+        //let indice = productos.findIndex(productos => productos.id === productoEncontrado);
+        let indice = productos.findIndex(productos => productos.id === idEncontrado);
+        console.log('productos: ',productos);
+        console.log('indice: ',indice);
+
+        //Quitar el producto del array del carrito con el indice indicado
+        listaProductosCarritoEnStorage.splice(indice, 1);
+
+        console.log("producto removido lista carrito");
+        //console.log(listaProductosCarritoEnStorage);
+
+        //quitar el producto en el HTML 
+        // VER DE HACER FUNCION
+        //ocultarProductoEnCarro(productoEncontrado);
+
+        //-----------------------------------------
+        //--------------ACTUALIZAR CARRO???-----------
+        //-----------------------------------------
+        mostrarTodosLosProductoEnCarro(listaProductosCarritoEnStorage);
+        //actualizar el contador de productos del carrito
+        actualizarContador();
+
+        //agregar producto al storage
+        guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+    }else{
+        
+        console.log("No está en el carrito");
+    }
+}
+
+
+function botonProducto(datosEvento) {
     //vemos los datos del evento
     //console.log(datosEvento.target.tagName," ",datosEvento.target.parentNode.tagName);
 
     //si el elemento clicado es un botón
     if (datosEvento.target.tagName === "BUTTON") {
-
-    //if (datosEvento.target.tagName === "BUTTON"){
         //verificamos el data-id del botón
-        // console.log(datosEvento.target.dataset);                //DOMStringMap {id: '4'}
-        // console.log(datosEvento.target.dataset.id);             //4
-        // console.log(typeof (datosEvento.target.dataset.id));    //string
-        //guardamos el id como number
-        const idProducto = parseInt(datosEvento.target.dataset.id);
-        // console.log("idProducto ",idProducto," type:", typeof(idProducto));
-        // console.log(listaProductosCarrito);
 
-        //buscamos el id en la lista del carrito y guardamos el resultado
-        const idEncontrado = buscarEnLista(idProducto, listaProductosCarrito)
-        // console.log("encontrado:", idEncontrado);
+        // Si datosEvento.target.dataset.id tiene el prefijo "agregar_" ejecutamos agregar
+        let idCliqueado = datosEvento.target.dataset.id;
 
-        // Si el id no está en la lista (-1) lo agregamos
-        // --- Si hay tiempo ver de agregar cantidad de cada producto ---
-        
-        if (idEncontrado === -1) {
-            //buscar el producto en la lista de productos por el idEncontrado
-            //y lo guardamos
-            const productoEncontrado = buscarProductoPorId(idProducto, productos);
-            console.log(productoEncontrado);
-            
-            //agregar el productoEncontrado a la lista del carrito
-            listaProductosCarrito.push(productoEncontrado)
-            console.log("agregar lista carrito");
-            console.log(listaProductosCarrito);
+        idCliqueadoString = idCliqueado.toString();
 
-            //insertar el producto en el HTML
-            insertarProductoEnCarro(productoEncontrado);
-
-            //actualizar el contador de productos del carrito
-            actualizarContador();
-
-            //agregar producto al storage
-            guardarCarritoEnStorage(listaProductosCarrito);
+        if(idCliqueadoString.slice(0, 7)=="agregar"){
+            idCliqueado = parseInt(idCliqueado.replace("agregar_",""));
+            //console.log("Agregar al carrito el id:",idCliqueado);
+            agregarAlCarrito(idCliqueado);       
         }
+        
+        if(idCliqueadoString.slice(0, 7)=="remover"){
+            idCliqueado = parseInt(idCliqueado.replace("remover_",""));
+            console.log("quitar del carrito el id:",idCliqueado);
+            removerDelCarrito(idCliqueado);       
+        }
+
+        
+
+        // Si datosEvento.target.dataset.id tiene el prefijo "remover_" ejecutamos quitar
     }
 }
 
@@ -354,32 +426,27 @@ async function inicio() {
     contenedorProductos.addEventListener("mouseout", ocultarDescripcion);
 
     //agregar el listener al botón Agregar al carrito
-    contenedorProductos.addEventListener("click", agregarAlCarrito);
+    contenedorProductos.addEventListener("click", botonProducto);
 
     //agregar el listener al botón Vaciar Carrito
     const botonVaciarCarrito = document.querySelector("#Botones_carro button#vaciar");
     botonVaciarCarrito.addEventListener("click", eliminarCarritoEnStorage)
 
     //cargar el carrito desde local storage
-    listaProductosCarrito = cargarCarritoDeStorage();
-    //console.log(listaProductosCarrito);
+    listaProductosCarritoEnStorage = cargarCarritoDeStorage();
+    //console.log(listaProductosCarritoEnStorage);
 
     actualizarContador();
 
-    //si el storage no está vacío
-    if (listaProductosCarrito.length != 0) {
-        //insertar los productos
-        for (const producto of listaProductosCarrito) {
-            insertarProductoEnCarro(producto);
-        }
-        //actualizar el contador
-        actualizarContador();
-    }
+    mostrarTodosLosProductoEnCarro(listaProductosCarritoEnStorage);
 
+
+
+    //???
     // //agregar el listener al botón Agregar al carrito
     // const botonVaciarMemoria = document.querySelector("#Botones_carro button#vaciarMemoria");
-    // botonVaciarMemoria.addEventListener("click", agregarAlCarrito);
-    // listaProductosCarrito = borrarCarritoDeStorage();
+    // botonVaciarMemoria.addEventListener("click", botonProducto);
+    // listaProductosCarritoEnStorage = borrarCarritoDeStorage();
 }
 
 // Instrucciones de mi programa **************************************************************
