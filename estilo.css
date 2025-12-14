@@ -73,6 +73,16 @@ aside.carrito {
     grid-area: aside2;
 }
 
+.list-group-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.list-group-item span + span{
+    justify-self: end;
+    margin-right: 0.5em;
+}
+
 
 aside article {
     /* margin: 10% 0; */
@@ -114,10 +124,12 @@ img.icono {
 }
 
 #contenedor_carro li {
+    
     margin-top: 0.25em;
     padding-left: 1em;
     text-align: left;
 }
+
 
 /* HEADER Y TITULOS ***************************************/
 
@@ -369,6 +381,15 @@ label {
     font-weight: 600;
     text-align: left;
     width: 6vw;
+}
+
+.input--error {
+    border: 3px solid red !important;
+}
+
+.deshabilitado {
+    background-color: lightgray;
+    color: gray;
 }
 
 /* MEDIA QUERYS */

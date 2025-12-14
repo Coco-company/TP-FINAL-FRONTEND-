@@ -235,7 +235,12 @@ function mostrarProductoEnCarro(producto) {
     //crear el elemento li
     const liProducto = document.createElement("li");
     //agregar el contenido
-    liProducto.textContent = `${producto.nombre} ${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}`;
+    //liProducto.textContent = `${producto.nombre} ${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}`;
+    
+    liProducto.innerHTML = `<span>${producto.nombre}</span><span>${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}</span>`;
+    
+    
+    
     //agregar las clases
     liProducto.className = "list-group-item";
     //insertar el elemento
@@ -308,7 +313,7 @@ function agregarAlCarrito(idBotonCliqueado){
         //agregar el productoEncontrado a la lista del carrito
         listaProductosCarritoEnStorage.push(productoEncontrado)
         //console.log("agregar lista carrito");
-        console.log(listaProductosCarritoEnStorage);
+        //console.log(listaProductosCarritoEnStorage);
 
         //inserta EL producto en el HTML
         mostrarProductoEnCarro(productoEncontrado);
@@ -335,16 +340,22 @@ function removerDelCarrito(idBotonCliqueado){
         //buscar el producto en la lista de productos por el idEncontrado
         //y lo guardamos
         const productoEncontrado = buscarProductoPorId(idBotonCliqueado, productos);
-        console.log(idEncontrado);
+        //console.log("idEncontrado ",idEncontrado);
         
         //agregar el productoEncontrado a la lista del carrito
-//console.log("listaProductosCarritoEnStorage ",listaProductosCarritoEnStorage);
+        //console.log("listaProductosCarritoEnStorage ",listaProductosCarritoEnStorage);
 
         //listaProductosCarritoEnStorage.push(productoEncontrado)
-        //let indice = productos.findIndex(productos => productos.id === productoEncontrado);
-        let indice = productos.findIndex(productos => productos.id === idEncontrado);
-        console.log('productos: ',productos);
-        console.log('indice: ',indice);
+
+        let indice = -1;
+
+        // OBTENEMOS EL INDICE QUE COINCIDA CON EL ID ENCONTRADO
+        for(let i=0; i<listaProductosCarritoEnStorage.length; i++){
+            if(listaProductosCarritoEnStorage[i].id === idEncontrado){
+                indice = i;
+                break;
+            }
+        }
 
         //Quitar el producto del array del carrito con el indice indicado
         listaProductosCarritoEnStorage.splice(indice, 1);
@@ -371,10 +382,9 @@ function removerDelCarrito(idBotonCliqueado){
     }
 }
 
-
+//
 function botonProducto(datosEvento) {
-    //vemos los datos del evento
-    //console.log(datosEvento.target.tagName," ",datosEvento.target.parentNode.tagName);
+    //vemos los datos del evento con el parametro "datosEvento" que trae los datos del click [MUY MUY IMPORTANTE]
 
     //si el elemento clicado es un botón
     if (datosEvento.target.tagName === "BUTTON") {
@@ -440,8 +450,6 @@ async function inicio() {
 
     mostrarTodosLosProductoEnCarro(listaProductosCarritoEnStorage);
 
-
-
     //???
     // //agregar el listener al botón Agregar al carrito
     // const botonVaciarMemoria = document.querySelector("#Botones_carro button#vaciarMemoria");
@@ -451,3 +459,62 @@ async function inicio() {
 
 // Instrucciones de mi programa **************************************************************
 inicio();
+
+//---------------------------------------------------------------------------
+//------------------           VALIDACION FORMULARIO        -----------------
+//---------------------------------------------------------------------------
+
+const nombre = document.getElementById("nombre");
+const apellido = document.getElementById("apellido");
+const email = document.getElementById("email");
+const botonSubmit = document.getElementById("submit");
+
+botonSubmit.disabled = true;
+
+// Revisión de errores en el formulario cada 500ms
+//setInterval(revisionValidacionError, 500);
+
+function revisionValidacionError(params) {
+    const busquedaError = document.querySelector('.input--error');
+    
+    if (busquedaError) {
+        botonSubmit.disabled = true;
+    }else{
+        botonSubmit.disabled = false;
+    }
+}
+
+
+
+
+function validarNombre(datosEvento) {   //con datosEvento hallamos el elemento que disparó el evento
+    //console.log("Entro el evento");
+    //console.log("datosEvento",datosEvento.srcElement);
+    if(datosEvento.srcElement.value.length !== 0){  //Solo aplica si tiene contenido
+        if(datosEvento.srcElement.value.length < 3 || !isNaN(datosEvento.srcElement.value)){
+            //console.log("Entro el if");
+            datosEvento.srcElement.classList.add("input--error");
+        }else{
+            datosEvento.srcElement.classList.remove("input--error");
+        }
+    }
+    revisionValidacionError();
+}
+
+function validarMail(datosEvento) {
+    //console.log("Entro el evento");
+    if(datosEvento.srcElement.value.length !== 0){  //Solo aplica si tiene contenido
+        if(!email.value.includes("@") || !email.value.includes(".com") || email.value.length < 5){
+            console.log("Entro el if");
+            email.classList.add("input--error");
+        }else{
+            email.classList.remove("input--error");
+        }
+    }
+    revisionValidacionError();
+}
+
+//----------- EVENT LISTENERS VALIDACION FORMULARIO ---------------
+nombre.addEventListener("focusout", validarNombre)
+apellido.addEventListener("focusout", validarNombre)
+email.addEventListener("focusout", validarMail)
