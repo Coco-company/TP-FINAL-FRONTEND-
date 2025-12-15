@@ -73,17 +73,6 @@ aside.carrito {
     grid-area: aside2;
 }
 
-.list-group-item {
-    display: grid;
-    grid-template-columns: auto 1fr;
-}
-
-.list-group-item span + span{
-    justify-self: end;
-    margin-right: 0.5em;
-}
-
-
 aside article {
     /* margin: 10% 0; */
     padding: 2px;
@@ -103,7 +92,7 @@ aside article p {
 h3 {
     font-size: 1.2em;
     font-weight: 800;
-    margin: 10px 5px;
+    margin: 10px 5px 30px;
 }
 
 aside article h6 {
@@ -120,14 +109,29 @@ img.icono {
 }
 
 #contenedor_carro {
-    margin: 1em 0;
+    margin: 0;
+    padding: 0;
+
 }
 
 #contenedor_carro li {
-    
+    width: 90%;
     margin-top: 0.25em;
     padding-left: 1em;
+
+}
+
+.list-group-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     text-align: left;
+    padding: 0 5px;
+    max-width: 95%;
+}
+
+.list-group-item span + span{
+    justify-self: end;
+    margin-right: 0.5em;
 }
 
 
@@ -235,6 +239,8 @@ section {
     padding: 1em 0;
 }
 
+
+
 section video {
     width: 40vw;
 }
@@ -296,11 +302,20 @@ td + td {
 
 /*BOTONES ***********************************/
 
-#Botones_carro #vaciar, #Botones_carro #comprar {
+#Botones_carro * {
     padding: 0.4em;
     min-width: 80%;
     max-width: 95%;
     border-radius: 10px;
+}
+
+#Botones_carro input {
+    width: 70%;
+    justify-items: center;
+    align-items: center;
+    border: 0;
+    background-color: transparent;
+
 }
 
 /* button img {
@@ -392,38 +407,6 @@ label {
     color: gray;
 }
 
-/* MEDIA QUERYS */
-/*
-@media (min-width: 600px) {
-        input, select {
-        min-width: 120px;
-    }
-
-    label {
-        min-width: 60px;
-    }
-}
-
-@media (min-width: 992px) {
-    input, select {
-        min-width: 150px;
-    }
-
-    label {
-        min-width: 75px;
-    }
-}
-
-@media only screen and (min-width: 1300px) {
-    input, select {
-        min-width: 200px;
-    }
-
-    label {
-        min-width: 100px;
-    }
-}*/
-
 /* FOOT ***************************************/
 footer {
     background-color: rgba(90, 150, 120, 25);
@@ -489,3 +472,71 @@ div.contenedor--imagen img {
     
 }
 
+
+/* MEDIA QUERYS */
+
+@media (max-width: 650px) {
+    body    {
+        min-width: 800px;
+        margin: 0 auto;
+        padding: 0;
+        display: grid;
+        /* grid-template-columns: 68vw 12vw; */
+        grid-template-columns:minmax(480px,70%);
+        grid-template-areas:"header"
+                            "main"
+                            "aside2"
+                            "aside1"
+                            "footer";
+        border-width: 0 2px 0;
+    }
+
+    form * {
+        
+        width: 90%;
+        margin: 5px auto;
+
+    }
+
+    .list-group-item {
+    display: grid;
+    
+    max-width: 60%;
+    }
+
+    #contenedor_carro li {
+    
+    margin-left: 20%;
+    max-width: 60%;
+    }
+
+    body > footer {
+        margin: 10px 0 0 0;
+        padding: 5px 15px;
+    }
+
+    aside.carrito {
+        margin: 15px 20px;
+        padding: 30px 20px;
+        border: 5px solid gray;
+        background-color: rgba(90, 150, 120, 90);
+        border-radius: 20px;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 992px) {
+    body {
+        min-width: 800px;
+        margin: 0 auto;
+        padding: 0;
+        display: grid;
+        /* grid-template-columns: 68vw 12vw; */
+        grid-template-columns:minmax(480px,70%);
+        grid-template-areas:"header header"
+                            "main aside2"
+                            "main aside1"
+                            "footer footer";
+        border-width: 0 2px 0;
+    }
+
+}

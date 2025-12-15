@@ -141,7 +141,7 @@
             <br>
             <label for="file">Adjuntos:</label><input type="file" id="file"><br>
             <label for="comentario">Comentario:</label><input type="textarea" id="comentario" name="comentario" maxlength="1000"><br>
-            <button id="submit" type="submit">Enviar</button>
+            <button id="submitContacto" type="submit">Enviar</button>
         </form>
     </section>
     </main>
@@ -155,9 +155,13 @@
         <ul id="contenedor_carro">
         </ul>
         <div id="Botones_carro">
-            <p id="total"></p>
-            <button id="vaciar">Vaciar carrito</button>
-            <button id="comprar">Comprar</button>
+
+            <form action="https://formspree.io/f/mrbadkqz" method="POST" autocomplete="on"></form>
+                <input  id="total" type="number" value="" readonly>
+                <button id="vaciar">Vaciar carrito</button>
+                <button id="submitComprar" type="submit">Comprar</button>
+            </form>
+
         </div>
     </aside>
     <footer>

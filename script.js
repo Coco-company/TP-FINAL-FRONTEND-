@@ -466,7 +466,7 @@ inicio();
 const nombre = document.getElementById("nombre");
 const apellido = document.getElementById("apellido");
 const email = document.getElementById("email");
-const botonSubmit = document.getElementById("submit");
+const botonSubmit = document.getElementById("submitContacto");
 
 botonSubmit.disabled = true;
 
