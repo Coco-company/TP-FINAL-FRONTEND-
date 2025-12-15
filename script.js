@@ -330,7 +330,6 @@ function agregarAlCarrito(idBotonCliqueado){
 }
 
 
-
 function removerDelCarrito(idBotonCliqueado){
     //buscamos el id en la lista del carrito y guardamos el resultado
     const idEncontrado = buscarEnLista(idBotonCliqueado, listaProductosCarritoEnStorage)
@@ -483,9 +482,6 @@ function revisionValidacionError(params) {
         botonSubmit.disabled = false;
     }
 }
-
-
-
 
 function validarNombre(datosEvento) {   //con datosEvento hallamos el elemento que disparó el evento
     //console.log("Entro el evento");
