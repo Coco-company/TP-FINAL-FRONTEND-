@@ -123,15 +123,37 @@ img.icono {
 
 .list-group-item {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 22px 48% auto;
     text-align: left;
     padding: 0 5px;
     max-width: 95%;
 }
 
-.list-group-item span + span{
-    justify-self: end;
-    margin-right: 0.5em;
+div#estado {
+    margin: 20px 0;
+    font-style: italic;
+}
+
+#precio_total {
+    color: black;
+    font-weight: 600;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.cantidadLista {
+    
+
+}
+
+.nombreLista {
+    /* text-align: left; */
+
+
+}
+
+.precioLista {
+
 }
 
 

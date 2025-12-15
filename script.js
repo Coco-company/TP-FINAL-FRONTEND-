@@ -2,6 +2,7 @@
 let productos = [];
 let listaProductosCarritoEnStorage = cargarCarritoDeStorage();
 const contenedorProductos = document.getElementById("gondola");
+let totalCarrito = 0;
 
 console.log('---INICIO---');
 
@@ -11,7 +12,7 @@ function mostrarBotonesyContador() {
 
     let botonera = document.getElementById("Botones_carro");
     let contenedorCarro = document.getElementById("contenedor_carro");
-    const estadoCarrito = document.querySelector(".carrito #estado");
+    let estadoCarrito = document.querySelector(".carrito #estado");
     
     // Si el carro no tiene contenido oculta los botones y el contador
     if(contenedorCarro.childElementCount != 0){
@@ -24,7 +25,7 @@ function mostrarBotonesyContador() {
     }
 }
 
-//función para actualizar el contador
+//función para actualizar el contador de productos en el carrito
 function actualizarContador() {
 
     mostrarBotonesyContador();
@@ -32,11 +33,28 @@ function actualizarContador() {
     const contenedorNumero = document.querySelector(".carrito #contador");
     //verificamos si existe (el cartel de cantidad se muestra si hay productos)
     if(contenedorNumero!=null){
-        //console.log(contenedorNumero);
         //usamos la cantidad de productos de la lista
-        contenedorNumero.textContent = listaProductosCarritoEnStorage.length;
+        let total = 0;
+        // SUMO LAS CANTIDADES DE CADA PRODUCTO
+        for(const producto of listaProductosCarritoEnStorage){
+            total += parseInt(producto.cantidad);
+        }
+        contenedorNumero.textContent = total;
     }
 }
+
+function actualizarPrecioTotalCarrito(){
+    //totalCarrito
+    const contenedorPrecioTotal = document.getElementById("precio_total");
+    let total = 0;
+    for(const producto of listaProductosCarritoEnStorage){
+        total += producto.precio * producto.cantidad;
+    }
+
+    contenedorPrecioTotal.value = total.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 });
+    
+}
+
 
 //-------------------------------------------------------------------------
 //----------------------      LOCAL STORAGE    ----------------------------
@@ -45,6 +63,10 @@ function actualizarContador() {
 function guardarCarritoEnStorage(lista) {
     const carritoJSON = JSON.stringify(lista);
     localStorage.setItem("listaCarrito", carritoJSON);
+
+    actualizarPrecioTotalCarrito();
+    actualizarContador();
+
     // console.log("producto en Storage");
 }
 
@@ -58,6 +80,7 @@ function eliminarCarritoEnStorage() {
 
 function cargarCarritoDeStorage() {
     const carritoJSON = localStorage.getItem("listaCarrito");
+    console.log(JSON.parse(carritoJSON));
     if (carritoJSON) {
         return JSON.parse(carritoJSON);
     }
@@ -85,25 +108,20 @@ function vaciarCarrito() {
 //--------------------------------------------------------------------
 function mostrarDescripcion(datosEvento) {
 
-    //console.log(datosEvento.target.tagName);
-
     const elementoEvento = datosEvento.target.tagName;
     if (elementoEvento === "A") {
         //obtener el elemento mouseOver
         const elementoAccionado = datosEvento.target;
 
         //obtener la descripción del dataset
-       // console.log(datosEvento.target.dataset.descripcion)
+        // console.log(datosEvento.target.dataset.descripcion)
         const descripcionProducto = elementoAccionado.dataset.descripcion;
         
         //Sube en el DOM hasta encontrar la tarjeta contenedora del botón
         const articleCard = elementoAccionado.closest(".producto--bem");
-        //console.log(articleCard);
         
         //obtener el div de la descripción dentro de la tarjeta
         const divDescripcion = articleCard.querySelector(".descripcion");
-        //console.log(divDescripcion);
-
 
         if (divDescripcion.children.length == 0) {
             //creamos el elemento que vamos a insertar
@@ -112,7 +130,6 @@ function mostrarDescripcion(datosEvento) {
 
             divDescripcion.appendChild(parrafoDescripcion); 
             //cambiamos el texto del enlace
-            //elementoAccionado.textContent = "Ocultar descripción";
             elementoAccionado.textContent = "";
         }
         else {
@@ -132,14 +149,11 @@ function ocultarDescripcion(datosEvento) {
         const elementoAccionado = datosEvento.target;
 
         const articleCard = elementoAccionado.closest(".producto--bem");
-        //console.log(articleCard);
-        
+                
         //obtener el div de la descripción dentro de la tarjeta
         const divDescripcion = articleCard.querySelector(".descripcion");
 
         const anchor = elementoAccionado.parentNode.previousElementSibling;
-
-        //console.log(elementoAccionado,"",);
 
         if (divDescripcion.children.length >= 1) {
             // Restaura estado
@@ -152,10 +166,7 @@ function ocultarDescripcion(datosEvento) {
 //-------------------------------------------------------------------------
 //-----------------   CARGA PRODUCTOS EN GONDOLA   ------------------------
 //-------------------------------------------------------------------------
-function insertarProductos(lista) {
-    // Capturo el elemento contenedor de productos (PASADO A GLOBAL!)
-    //const contenedorProductos = document.getElementById("gondola");
-
+function insertarProductosEnGondola(lista) {
     //console.log(contenedorProductos);
 
     //utilizo un bucle para insertar todos los elementos de la lista
@@ -206,8 +217,8 @@ async function cargarProductosApi() {
             throw new Error(`Error al obtener los datos: ${respuesta.status} - ${respuesta.statusText}`);
         }
         
-        // Conversión del JSON a Array asincrónico
-        const productosArray = await respuesta.json();
+        
+        const productosArray = await respuesta.json(); // Conversión del JSON a Array asincrónico
         // console.log(productosArray);
         return productosArray;        
     } 
@@ -215,36 +226,78 @@ async function cargarProductosApi() {
     catch (error) {
         //verificamos el error
         console.error("Fallo grave en la carga:", error);
-        // Informar al usuario en la interfaz --------------------------------------------------- VER!!
-        /*
-        const listaUL = document.querySelector("#productos, .contenedorProductos");
+        
+        // Informar al usuario en la interfaz
+        const listaUL = document.querySelector("#gondola");
         listaUL.innerHTML = '<li id="mensaje-error">❌ Error al cargar el catálogo.</li>';
-        */
-        // Devolvemos un array vacío para evitar errores posteriores
-        return []; 
+                
+        return []; // Devolvemos un array vacío para evitar errores posteriores
     }
 }
 
-//función para insertar 1 producto en el HTML del carrito
+//---------------------------------------------------------------------
+//---------- SI EL PRODUCTO NO ESTA EN EL CARRITO, LO AGREGA ----------
+//---------------------------------------------------------------------
 function mostrarProductoEnCarro(producto) {
-
-    console.log('pasó por insertar producto');
-    // console.log("IPH producto ",producto);
+        
     //obtener el contenedor ul
     const listaCarrito = document.querySelector("aside.carrito #contenedor_carro");
-    //crear el elemento li
-    const liProducto = document.createElement("li");
+
+    const liProducto = document.createElement("li");        //crear el elemento li
+
     //agregar el contenido
-    //liProducto.textContent = `${producto.nombre} ${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}`;
+    liProducto.innerHTML = `<span class="cantidadLista">${producto.cantidad}</span>
+                            <span class="nombreLista">${producto.nombre}</span>
+                            <span class="precioLista">${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}</span>`;
     
-    liProducto.innerHTML = `<span>${producto.nombre}</span><span>${producto.precio.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0, minimumFractionDigits: 0 })}</span>`;
-    
-    
-    
-    //agregar las clases
-    liProducto.className = "list-group-item";
-    //insertar el elemento
-    listaCarrito.appendChild(liProducto);  
+    liProducto.className = "list-group-item";   //agregar las clases
+    listaCarrito.appendChild(liProducto);     //insertar el elemento
+}
+
+
+//--- SI EL PRODUCTO YA ESTA EN EL CARRITO, SOLO ACTUALIZA LA CANTIDAD ---
+function editarProductoEnCarro(producto,accion) {
+    //const listaCarrito = document.querySelector("aside.carrito #contenedor_carro");
+
+    const listaDeItemsCarro = document.getElementsByClassName("list-group-item")
+
+    for (const item of listaDeItemsCarro) {
+
+        if(item.querySelector(".nombreLista").textContent === producto.nombre){
+            // Si coincide el nombre del producto, actualizamos la cantidad
+            let campoCantidad = item.querySelector(".cantidadLista")
+            let cantidadActual = parseInt(campoCantidad.textContent)
+            if(accion==="agregar"){
+                cantidadActual +=1;
+                campoCantidad.textContent = cantidadActual;
+                producto.cantidad = cantidadActual;
+                //actualizarPrecioTotalCarrito();
+            }
+            // debería por lo menos tener 1 para entrar acá
+            if(accion==="remover"){
+                //RESTO DEL CARRITO Y DE LA LISTA DEL STORAGE
+                campoCantidad.textContent = cantidadActual -= 1;
+                
+                producto.cantidad = parseInt(campoCantidad.textContent);
+
+                console.log("Cantidad actual después de remover: ",cantidadActual);
+
+                if(cantidadActual===0){
+                    // Si la cantidad llega a 0, removemos el producto del carrito
+                    removerDelCarrito(producto.id);
+                }
+            }
+            guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+         }
+    }
+
+    console.log("Storage ",listaProductosCarritoEnStorage);
+
+    actualizarPrecioTotalCarrito();
+    actualizarContador();   //actualizar el contador de productos del carrito
+//    guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+
+    console.log("DESPUES DEL F5 FALLA EL UPDATE DE CANTIDAD, DE PRECIO Y DEL STORAGE");
 }
 
 //función para insertar todos los productos en el HTML del carrito
@@ -265,9 +318,14 @@ function mostrarTodosLosProductoEnCarro(listaProductos) {
     }
 }
 
+
+//---------------------------------------------------------------------
+//------------------------   AUXILIARES   -----------------------------
+//---------------------------------------------------------------------
+
 function buscarEnLista(id, lista) {
     //verificamos los datos recibidos
-    // console.log(id, lista);
+   // console.log(id, lista);
 
     for (const producto of lista) {
         //si encontramos el id
@@ -277,7 +335,6 @@ function buscarEnLista(id, lista) {
         }
     }
 
-    //POR ACÁ SI QUIERO AGREGAR LA FUNCIONALIDAD DE CANTIDAD DE PRODUCTOS
     //si en el bucle no se encontró el id
     return -1;
 }
@@ -295,6 +352,7 @@ function buscarProductoPorId(id, lista) {
     }
 }
 
+
 //---------------------------------------------------------------------------
 //---------------------- Agregar productos al carrito -----------------------
 //---------------------------------------------------------------------------
@@ -302,33 +360,43 @@ function buscarProductoPorId(id, lista) {
 function agregarAlCarrito(idBotonCliqueado){
     //buscamos el id en la lista del carrito y guardamos el resultado
     const idEncontrado = buscarEnLista(idBotonCliqueado, listaProductosCarritoEnStorage)
-
+    const productoEncontrado = buscarProductoPorId(idBotonCliqueado, productos);
     // Si el id no está en la lista (-1) lo agregamos
     if (idEncontrado === -1) {
-        //buscar el producto en la lista de productos por el idEncontrado
-        //y lo guardamos
-        const productoEncontrado = buscarProductoPorId(idBotonCliqueado, productos);
-        //console.log(productoEncontrado);
+        //buscar el producto en la lista de productos por el idEncontrado y lo guardamos
         
+        productoEncontrado.cantidad = 1; //CREAMOS LA PROP cantidad PARA EL PRODUCTO
+
         //agregar el productoEncontrado a la lista del carrito
         listaProductosCarritoEnStorage.push(productoEncontrado)
         //console.log("agregar lista carrito");
-        //console.log(listaProductosCarritoEnStorage);
 
         //inserta EL producto en el HTML
         mostrarProductoEnCarro(productoEncontrado);
 
-        //actualizar el contador de productos del carrito
-        actualizarContador();
+//        actualizarContador();   //actualizar el contador de productos del carrito
 
-        //agregar producto al storage
-        guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+        //guardarCarritoEnStorage(listaProductosCarritoEnStorage);  //agregar producto al storage
+    
     }else{
-        // --- Si hay tiempo ver de agregar cantidad de cada producto ---
-        console.log("El producto ya está en el carrito");
+        //el producto ya está en el carrito, solo actualizamos la cantidad
+        editarProductoEnCarro(productoEncontrado,"agregar");
+        
+        //console.log("El producto ya está en el carrito");
     }
-}
 
+    //actualizar el contador de productos del carrito
+    //actualizarContador();
+
+    //agregar producto al storage
+    actualizarContador();   //actualizar el contador de productos del carrito
+    actualizarPrecioTotalCarrito();
+
+    guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+
+    console.log("listaProductosCarritoEnStorage: ",listaProductosCarritoEnStorage);
+   
+}
 
 function removerDelCarrito(idBotonCliqueado){
     //buscamos el id en la lista del carrito y guardamos el resultado
@@ -336,15 +404,9 @@ function removerDelCarrito(idBotonCliqueado){
 
     // Si el id está en la lista lo removemos
     if (idEncontrado !== -1) {
-        //buscar el producto en la lista de productos por el idEncontrado
-        //y lo guardamos
-        const productoEncontrado = buscarProductoPorId(idBotonCliqueado, productos);
-        //console.log("idEncontrado ",idEncontrado);
-        
-        //agregar el productoEncontrado a la lista del carrito
-        //console.log("listaProductosCarritoEnStorage ",listaProductosCarritoEnStorage);
 
-        //listaProductosCarritoEnStorage.push(productoEncontrado)
+        //SI CANTIDAD >1 SOLO ACTUALIZAR CANTIDAD
+        //SI CANTIDAD =1 REMOVER PRODUCTO DEL CARRITO
 
         let indice = -1;
 
@@ -362,28 +424,24 @@ function removerDelCarrito(idBotonCliqueado){
         console.log("producto removido lista carrito");
         //console.log(listaProductosCarritoEnStorage);
 
-        //quitar el producto en el HTML 
-        // VER DE HACER FUNCION
-        //ocultarProductoEnCarro(productoEncontrado);
-
-        //-----------------------------------------
-        //--------------ACTUALIZAR CARRO???-----------
-        //-----------------------------------------
         mostrarTodosLosProductoEnCarro(listaProductosCarritoEnStorage);
         //actualizar el contador de productos del carrito
         actualizarContador();
 
         //agregar producto al storage
         guardarCarritoEnStorage(listaProductosCarritoEnStorage);
+
+        actualizarPrecioTotalCarrito();
     }else{
         
         console.log("No está en el carrito");
     }
 }
 
-//
+//DETERMINNO QUE BOTÓN DEL PRODUCTO FUE CLICKEADO
 function botonProducto(datosEvento) {
-    //vemos los datos del evento con el parametro "datosEvento" que trae los datos del click [MUY MUY IMPORTANTE]
+    //vemos los datos del evento con el parametro "datosEvento"...
+    //...que trae los datos del click [MUY MUY IMPORTANTE]
 
     //si el elemento clicado es un botón
     if (datosEvento.target.tagName === "BUTTON") {
@@ -403,29 +461,23 @@ function botonProducto(datosEvento) {
         if(idCliqueadoString.slice(0, 7)=="remover"){
             idCliqueado = parseInt(idCliqueado.replace("remover_",""));
             console.log("quitar del carrito el id:",idCliqueado);
-            removerDelCarrito(idCliqueado);       
+            
+            editarProductoEnCarro(buscarProductoPorId(idCliqueado, productos),"remover");
+            //removerDelCarrito(idCliqueado);       
         }
-
-        
-
-        // Si datosEvento.target.dataset.id tiene el prefijo "remover_" ejecutamos quitar
     }
 }
-
 
 //---------------------------------------------------------------------------
 
 // Inicia la carga de productos y agrega Event Listeners
 async function inicio() {
-
-    /* Oculta botones "vaciar" y "comprar" si el carro está vacío*/
-    /* Ver de modulizar */
-
+    
     // Guardamos en var global productos la lista obtenida del json
     productos = await cargarProductosApi();
 
     // Insertar los productos en la página (Gondola)
-    insertarProductos(productos);
+    insertarProductosEnGondola(productos);
 
     //seleccionar el contenedor de los productos ingresados PASADO A GLOBAL
     //const contenedorProductos = document.querySelector("#gondola");
@@ -446,18 +498,15 @@ async function inicio() {
     //console.log(listaProductosCarritoEnStorage);
 
     actualizarContador();
+    actualizarPrecioTotalCarrito();
 
     mostrarTodosLosProductoEnCarro(listaProductosCarritoEnStorage);
-
-    //???
-    // //agregar el listener al botón Agregar al carrito
-    // const botonVaciarMemoria = document.querySelector("#Botones_carro button#vaciarMemoria");
-    // botonVaciarMemoria.addEventListener("click", botonProducto);
+    
     // listaProductosCarritoEnStorage = borrarCarritoDeStorage();
 }
 
-// Instrucciones de mi programa **************************************************************
 inicio();
+
 
 //---------------------------------------------------------------------------
 //------------------           VALIDACION FORMULARIO        -----------------
@@ -513,4 +562,5 @@ function validarMail(datosEvento) {
 //----------- EVENT LISTENERS VALIDACION FORMULARIO ---------------
 nombre.addEventListener("focusout", validarNombre)
 apellido.addEventListener("focusout", validarNombre)
-email.addEventListener("focusout", validarMail)
+email.addEventListener("focusout", validarMail);
+
